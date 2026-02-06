@@ -4,10 +4,12 @@ import Heading from '../../components/heading';
 import { Button } from '../../components/ui/button';
 import { Separator } from '../../components/ui/separator';
 import useRoute from '../../hooks/use-route';
+import useTranslator from '../../hooks/useTranslator';
 import { cn } from '../../lib/utils';
 import { type NavItem } from '../../types';
 
 export default function SettingsLayout({ children }: PropsWithChildren) {
+  const { __ } = useTranslator();
   const route = useRoute();
   const { hewcode } = usePage().props as any;
   const features = hewcode?.panel?.features || {};
@@ -33,7 +35,7 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
     },
   ];
 
-  const sidebarNavItems = allNavItems.filter(item => item.enabled);
+  const sidebarNavItems = allNavItems.filter((item) => item.enabled);
 
   // When server-side rendering, we only render the layout on the client...
   if (typeof window === 'undefined') {
@@ -44,7 +46,7 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
 
   return (
     <div className="px-4 py-6">
-      <Heading title="Settings" description="Manage your profile and account settings" />
+      <Heading title={__('hewcode.settings.title')} description={__('hewcode.settings.description')} />
 
       <div className="flex flex-col lg:flex-row lg:space-x-12">
         <aside className="w-full max-w-xl lg:w-48">

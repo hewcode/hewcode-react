@@ -1,18 +1,10 @@
 import { useState } from 'react';
+import useTranslator from '../../hooks/useTranslator.js';
 import { Icon } from '../icon-registry';
 import useWidgetPolling from './useWidgetPolling';
 
-export default function ListWidget({
-  name,
-  path,
-  seal,
-  label,
-  items = [],
-  emptyState = 'No items',
-  hasAction = false,
-  refreshInterval,
-  className = '',
-}) {
+export default function ListWidget({ name, path, seal, label, items = [], emptyState, hasAction = false, refreshInterval, className = '' }) {
+  const { __ } = useTranslator();
   // Use state to hold widget data that can be updated via polling
   const [widgetData, setWidgetData] = useState({
     label,
@@ -40,7 +32,7 @@ export default function ListWidget({
             <h3 className="text-foreground text-lg font-semibold">{widgetData.label}</h3>
           </div>
         )}
-        <div className="text-muted-foreground p-6 text-center">{emptyState}</div>
+        <div className="text-muted-foreground p-6 text-center">{emptyState || __('hewcode.common.no_items')}</div>
       </div>
     );
   }

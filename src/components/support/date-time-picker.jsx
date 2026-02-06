@@ -1,5 +1,6 @@
 import { CalendarIcon, ChevronDownIcon, ClockIcon } from 'lucide-react';
 import * as React from 'react';
+import useTranslator from '../../hooks/useTranslator.js';
 import { Button } from '../ui/button.jsx';
 import { Calendar } from '../ui/calendar.jsx';
 import { Input } from '../ui/input.jsx';
@@ -49,7 +50,9 @@ export default function DateTimePicker({
 
   // Custom picker (non-native)
   if (type === 'date-picker' || (hasDate && !hasTime)) {
-    return <CustomDatePicker name={name} label={label} value={value} onChange={onChange} error={error} required={required} placeholder={placeholder} />;
+    return (
+      <CustomDatePicker name={name} label={label} value={value} onChange={onChange} error={error} required={required} placeholder={placeholder} />
+    );
   }
 
   if (type === 'time-picker' || (hasTime && !hasDate)) {
@@ -68,6 +71,7 @@ export default function DateTimePicker({
 }
 
 function CustomDatePicker({ name, label, value, onChange, error, required, placeholder }) {
+  const { __ } = useTranslator();
   const [open, setOpen] = React.useState(false);
   const [selectedDate, setSelectedDate] = React.useState(value ? new Date(value) : undefined);
 
@@ -90,7 +94,7 @@ function CustomDatePicker({ name, label, value, onChange, error, required, place
           <Button variant="outline" className="h-9 w-full justify-between text-sm font-normal">
             <div className="flex items-center">
               <CalendarIcon className="mr-2 h-4 w-4" />
-              {selectedDate ? selectedDate.toLocaleDateString() : placeholder || 'Pick a date'}
+              {selectedDate ? selectedDate.toLocaleDateString() : placeholder || __('hewcode.common.pick_a_date')}
             </div>
             <ChevronDownIcon className="h-4 w-4" />
           </Button>
@@ -132,26 +136,10 @@ function CustomTimePicker({ name, label, value, onChange, error, required, place
     <div className="space-y-2">
       {label && <Label required={required}>{label}</Label>}
       <div className="flex items-center space-x-2">
-        <ClockIcon className="h-4 w-4 text-muted-foreground" />
-        <Input
-          type="number"
-          min="0"
-          max="23"
-          value={hours}
-          onChange={handleHoursChange}
-          className="w-16 text-center"
-          placeholder="HH"
-        />
+        <ClockIcon className="text-muted-foreground h-4 w-4" />
+        <Input type="number" min="0" max="23" value={hours} onChange={handleHoursChange} className="w-16 text-center" placeholder="HH" />
         <span className="text-muted-foreground">:</span>
-        <Input
-          type="number"
-          min="0"
-          max="59"
-          value={minutes}
-          onChange={handleMinutesChange}
-          className="w-16 text-center"
-          placeholder="MM"
-        />
+        <Input type="number" min="0" max="59" value={minutes} onChange={handleMinutesChange} className="w-16 text-center" placeholder="MM" />
       </div>
       {error && <p className="text-sm text-red-500">{error}</p>}
     </div>
@@ -159,6 +147,7 @@ function CustomTimePicker({ name, label, value, onChange, error, required, place
 }
 
 function CustomDateTimePicker({ name, label, value, onChange, error, required, placeholder }) {
+  const { __ } = useTranslator();
   const [open, setOpen] = React.useState(false);
   const [selectedDate, setSelectedDate] = React.useState(value ? new Date(value) : undefined);
   const [hours, setHours] = React.useState('12');
@@ -200,7 +189,7 @@ function CustomDateTimePicker({ name, label, value, onChange, error, required, p
   };
 
   const getDisplayValue = () => {
-    if (!selectedDate) return placeholder || 'Pick date and time';
+    if (!selectedDate) return placeholder || __('hewcode.common.pick_date_and_time');
     const dateStr = selectedDate.toLocaleDateString();
     const timeStr = `${hours}:${minutes}`;
     return `${dateStr} ${timeStr}`;
@@ -223,7 +212,7 @@ function CustomDateTimePicker({ name, label, value, onChange, error, required, p
           <Calendar mode="single" selected={selectedDate} onSelect={handleDateSelect} />
           <div className="border-t p-3">
             <div className="flex items-center justify-center space-x-2">
-              <ClockIcon className="h-4 w-4 text-muted-foreground" />
+              <ClockIcon className="text-muted-foreground h-4 w-4" />
               <Input type="number" min="0" max="23" value={hours} onChange={handleHoursChange} className="w-16 text-center" placeholder="HH" />
               <span className="text-muted-foreground">:</span>
               <Input type="number" min="0" max="59" value={minutes} onChange={handleMinutesChange} className="w-16 text-center" placeholder="MM" />

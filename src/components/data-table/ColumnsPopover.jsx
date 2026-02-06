@@ -74,16 +74,16 @@ export default function ColumnsPopover({ columns, columnVisibility, onColumnVisi
       <PopoverContent className="w-96" align="start">
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h4 className="font-medium">{__('hewcode.common.toggle_columns') || 'Toggle Columns'}</h4>
+            <h4 className="font-medium">{__('hewcode.common.toggle_columns')}</h4>
             <div className="flex gap-1">
               <CompactButton onClick={handleShowAll} variant="ghost" size="sm">
-                {__('hewcode.common.show_all') || 'Show all'}
+                {__('hewcode.common.show_all')}
               </CompactButton>
               <CompactButton onClick={handleHideAll} variant="ghost" size="sm">
-                {__('hewcode.common.hide_all') || 'Hide all'}
+                {__('hewcode.common.hide_all')}
               </CompactButton>
               <CompactButton onClick={handleReset} variant="ghost" size="sm">
-                {__('hewcode.common.reset') || 'Reset'}
+                {__('hewcode.common.reset')}
               </CompactButton>
             </div>
           </div>
@@ -109,7 +109,7 @@ export default function ColumnsPopover({ columns, columnVisibility, onColumnVisi
 
           {togglableColumns.length === 0 && (
             <p className="text-muted-foreground py-4 text-center text-sm">
-              {__('hewcode.common.no_togglable_columns') || 'No columns can be toggled'}
+              {__('hewcode.common.no_togglable_columns')}
             </p>
           )}
         </div>

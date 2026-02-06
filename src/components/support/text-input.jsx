@@ -1,5 +1,6 @@
 import { Eye, EyeOff } from 'lucide-react';
 import { useState } from 'react';
+import useTranslator from '../../hooks/useTranslator.js';
 import { cn } from '../../lib/utils';
 import { Input } from '../ui/input.jsx';
 import IconButton from './icon-button.jsx';
@@ -24,6 +25,7 @@ const TextInput = ({
   inputType = 'text',
   ...props
 }) => {
+  const { __ } = useTranslator();
   const [isRevealed, setIsRevealed] = useState(false);
   const hasError = error && error.length > 0;
   const hasSuffix = suffixIcon || suffixText || (revealable && type === 'password');
@@ -76,7 +78,7 @@ const TextInput = ({
                 variant="ghost"
                 size="sm"
                 onClick={toggleReveal}
-                title={isRevealed ? 'Hide password' : 'Show password'}
+                title={isRevealed ? __('hewcode.common.hide_password') : __('hewcode.common.show_password')}
                 disabled={disabled}
               />
             ) : suffixIcon ? (

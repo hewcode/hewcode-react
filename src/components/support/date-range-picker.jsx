@@ -1,11 +1,13 @@
 import { CalendarIcon, ChevronDownIcon } from 'lucide-react';
 import * as React from 'react';
+import useTranslator from '../../hooks/useTranslator.js';
 import { Button } from '../ui/button.jsx';
 import { Calendar } from '../ui/calendar.jsx';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover.jsx';
 import Label from './label.jsx';
 
 export default function DateRangePicker({ label, className, required = false, error = null, from, to, onChange }) {
+  const { __ } = useTranslator();
   const [openFrom, setOpenFrom] = React.useState(false);
   const [openTo, setOpenTo] = React.useState(false);
   const [fromDate, setFromDate] = React.useState(from && from !== '' ? new Date(from) : undefined);
@@ -41,7 +43,7 @@ export default function DateRangePicker({ label, className, required = false, er
             <Button variant="outline" className="h-9 flex-1 justify-between text-sm font-normal">
               <div className="flex items-center">
                 <CalendarIcon className="mr-2 h-4 w-4" />
-                {fromDate ? fromDate.toLocaleDateString() : 'From date'}
+                {fromDate ? fromDate.toLocaleDateString() : __('hewcode.common.from_date')}
               </div>
               <ChevronDownIcon className="h-4 w-4" />
             </Button>
@@ -57,7 +59,7 @@ export default function DateRangePicker({ label, className, required = false, er
             <Button variant="outline" className="h-9 flex-1 justify-between text-sm font-normal">
               <div className="flex items-center">
                 <CalendarIcon className="mr-2 h-4 w-4" />
-                {toDate ? toDate.toLocaleDateString() : 'To date'}
+                {toDate ? toDate.toLocaleDateString() : __('hewcode.common.to_date')}
               </div>
               <ChevronDownIcon className="h-4 w-4" />
             </Button>

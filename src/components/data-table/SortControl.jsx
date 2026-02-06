@@ -1,13 +1,15 @@
 import { ArrowDown, ArrowUp, ChevronDown } from 'lucide-react';
+import useTranslator from '../../hooks/useTranslator.js';
 import { Button } from '../ui/button.jsx';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown-menu.tsx';
 
 const SortControl = ({ columns, sortConfig, onSort, sortable }) => {
+  const { __ } = useTranslator();
   const { sort, direction } = sortConfig;
 
   // Find the currently sorted column
   const sortedColumn = columns.find((col) => col.key === sort);
-  const sortLabel = sortedColumn?.label || 'Sort by';
+  const sortLabel = sortedColumn?.label || __('hewcode.common.sort_by');
 
   // Filter to only sortable columns
   const sortableColumns = columns.filter((col) => sortable.includes(col.key));

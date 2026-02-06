@@ -1,5 +1,6 @@
-import { Upload, X, File, Image as ImageIcon } from 'lucide-react';
+import { File, Image as ImageIcon, Upload, X } from 'lucide-react';
 import { useCallback, useState } from 'react';
+import useTranslator from '../../hooks/useTranslator.js';
 import { cn } from '../../lib/utils';
 import { Button } from '../ui/button.jsx';
 import Label from './label.jsx';
@@ -11,7 +12,7 @@ const FileUpload = ({
   description,
   error,
   required = false,
-  placeholder = 'Click to upload or drag and drop',
+  placeholder,
   disabled = false,
   className,
   acceptedFileTypes = [],
@@ -24,11 +25,13 @@ const FileUpload = ({
   name,
   ...props
 }) => {
+  const { __ } = useTranslator();
   const [isDragging, setIsDragging] = useState(false);
   const [previews, setPreviews] = useState([]);
 
   const hasError = error && error.length > 0;
   const files = Array.isArray(value) ? value : value ? [value] : [];
+  const defaultPlaceholder = __('hewcode.file_upload.click_to_upload_or_drag_and_drop');
 
   // Helper to check if value is a File object
   const isFileObject = (val) => val && typeof val === 'object' && val.constructor && val.constructor.name === 'File';
@@ -59,7 +62,7 @@ const FileUpload = ({
     if (isFileObject(file)) {
       return file.name;
     }
-    return 'Uploaded file';
+    return __('hewcode.common.uploaded_file');
   };
 
   // Helper to get file size in bytes
@@ -121,7 +124,7 @@ const FileUpload = ({
         }
       }
     },
-    [files, maxFiles, maxSize, enablePreview, image, acceptedFileTypes, multiple, onChange]
+    [files, maxFiles, maxSize, enablePreview, image, acceptedFileTypes, multiple, onChange],
   );
 
   // Drag and drop handlers
@@ -147,7 +150,7 @@ const FileUpload = ({
         handleFiles(droppedFiles);
       }
     },
-    [disabled, handleFiles]
+    [disabled, handleFiles],
   );
 
   // Remove file
@@ -162,7 +165,7 @@ const FileUpload = ({
         setPreviews([]);
       }
     },
-    [files, multiple, onChange]
+    [files, multiple, onChange],
   );
 
   // File input change
@@ -173,7 +176,7 @@ const FileUpload = ({
         handleFiles(selectedFiles);
       }
     },
-    [handleFiles]
+    [handleFiles],
   );
 
   return (
@@ -198,40 +201,33 @@ const FileUpload = ({
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
           className={cn(
-            'relative rounded-lg border-2 border-dashed transition-colors overflow-hidden',
+            'relative overflow-hidden rounded-lg border-2 border-dashed transition-colors',
             isDragging && 'border-primary bg-primary/5',
             !isDragging && 'border-muted-foreground/25',
             hasError && 'border-destructive',
-            disabled && 'opacity-50 cursor-not-allowed'
+            disabled && 'cursor-not-allowed opacity-50',
           )}
         >
-          <label
-            htmlFor={name || 'file-upload'}
-            className={cn('block cursor-pointer relative group', disabled && 'cursor-not-allowed')}
-          >
+          <label htmlFor={name || 'file-upload'} className={cn('group relative block cursor-pointer', disabled && 'cursor-not-allowed')}>
             {getPreviewUrl(files[0]) ? (
               // Image preview
               <div className="relative">
-                <img src={getPreviewUrl(files[0])} alt={getFilename(files[0])} className="w-full h-auto max-h-96 object-contain" />
+                <img src={getPreviewUrl(files[0])} alt={getFilename(files[0])} className="h-auto max-h-96 w-full object-contain" />
                 {/* Hover overlay */}
-                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                  <div className="text-white text-center">
-                    <Upload className="h-8 w-8 mx-auto mb-2" />
-                    <p className="text-sm">Click or drag to replace</p>
+                <div className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 transition-opacity group-hover:opacity-100">
+                  <div className="text-center text-white">
+                    <Upload className="mx-auto mb-2 h-8 w-8" />
+                    <p className="text-sm">{__('hewcode.file_upload.click_or_drag_to_replace')}</p>
                   </div>
                 </div>
               </div>
             ) : (
               // Non-image file preview
               <div className="flex items-center gap-3 p-6">
-                {image ? (
-                  <ImageIcon className="h-12 w-12 text-muted-foreground" />
-                ) : (
-                  <File className="h-12 w-12 text-muted-foreground" />
-                )}
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium truncate">{getFilename(files[0])}</p>
-                  {getFileSize(files[0]) && <p className="text-xs text-muted-foreground">{(getFileSize(files[0]) / 1024).toFixed(2)} KB</p>}
+                {image ? <ImageIcon className="text-muted-foreground h-12 w-12" /> : <File className="text-muted-foreground h-12 w-12" />}
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-medium">{getFilename(files[0])}</p>
+                  {getFileSize(files[0]) && <p className="text-muted-foreground text-xs">{(getFileSize(files[0]) / 1024).toFixed(2)} KB</p>}
                 </div>
               </div>
             )}
@@ -244,7 +240,7 @@ const FileUpload = ({
             size="sm"
             onClick={() => handleRemove(0)}
             disabled={disabled}
-            className="absolute top-2 right-2 z-10"
+            className="absolute right-2 top-2 z-10"
           >
             <X className="h-4 w-4" />
           </Button>
@@ -261,19 +257,16 @@ const FileUpload = ({
               isDragging && 'border-primary bg-primary/5',
               !isDragging && 'border-muted-foreground/25',
               hasError && 'border-destructive',
-              disabled && 'opacity-50 cursor-not-allowed'
+              disabled && 'cursor-not-allowed opacity-50',
             )}
           >
             <label
               htmlFor={name || 'file-upload'}
-              className={cn(
-                'flex flex-col items-center justify-center gap-2 p-8 cursor-pointer',
-                disabled && 'cursor-not-allowed'
-              )}
+              className={cn('flex cursor-pointer flex-col items-center justify-center gap-2 p-8', disabled && 'cursor-not-allowed')}
             >
-              <Upload className="h-8 w-8 text-muted-foreground" />
-              <p className="text-sm text-muted-foreground">{placeholder}</p>
-              {maxSize && <p className="text-xs text-muted-foreground">Max file size: {maxSize}KB</p>}
+              <Upload className="text-muted-foreground h-8 w-8" />
+              <p className="text-muted-foreground text-sm">{placeholder || defaultPlaceholder}</p>
+              {maxSize && <p className="text-muted-foreground text-xs">Max file size: {maxSize}KB</p>}
             </label>
           </div>
 
@@ -289,15 +282,15 @@ const FileUpload = ({
                     {previewUrl ? (
                       <img src={previewUrl} alt={getFilename(file)} className="h-10 w-10 rounded object-cover" />
                     ) : image ? (
-                      <ImageIcon className="h-10 w-10 text-muted-foreground" />
+                      <ImageIcon className="text-muted-foreground h-10 w-10" />
                     ) : (
-                      <File className="h-10 w-10 text-muted-foreground" />
+                      <File className="text-muted-foreground h-10 w-10" />
                     )}
 
                     {/* File info */}
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium truncate">{getFilename(file)}</p>
-                      {getFileSize(file) && <p className="text-xs text-muted-foreground">{(getFileSize(file) / 1024).toFixed(2)} KB</p>}
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm font-medium">{getFilename(file)}</p>
+                      {getFileSize(file) && <p className="text-muted-foreground text-xs">{(getFileSize(file) / 1024).toFixed(2)} KB</p>}
                     </div>
 
                     {/* Remove button */}
